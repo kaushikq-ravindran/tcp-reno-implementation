@@ -1,0 +1,77 @@
+ GENERIC ALGORITHM FOR TCP RENO	
+
+ SLOW START
+
+    • When TCP connection begins
+      cwnd = 1 MSS => initial sending rate = MSS/RTT
+      ssthresh = 64 KB
+      dupACKcount = 0
+      
+    • if timeout (indicates loss event (congestion))
+      ssthresh = cwnd/2
+      cwnd = 1 MSS
+      dupACKcount = 0
+      retransmit missing segment
+      
+    • if duplicate ACK
+      dupACKcount++
+
+    • if new ACK
+      cwnd = cwnd + MSS
+      dupACKcount = 0
+      transmit new segment(s), as allowed
+      
+    • if cwnd >= ssthresh
+      Slow Start ends
+      TCP transitions into Congestion Avoidance mode
+      
+    • if dupACKcount = 3 
+      (performs fast retransmit and enters Fast Recovery mode)
+      ssthresh = cwnd/2
+      cwnd = ssthresh + 3.MSS
+      retransmit missing segment
+
+
+ CONGESTION AVOIDANCE
+
+    • if new ACK
+      cwnd = cwnd + MSS.(MSS/cwnd)
+      dupACKcount = 0
+      transmit new segment(s), as allowed
+      
+    • if duplicate ACK
+      dupACKcount++
+      
+    • if timeout
+      ssthresh = cwnd/2
+      cwnd = 1 MSS
+      dupACKcount = 0
+      retransmit missing segment
+      TCP transitions into Slow Start Mode
+      
+    • if dupACKcount = 3
+      ssthresh = cwnd/2
+      cwnd = ssthresh + 3.MSS
+      retransmit missing segment
+      TCP transitions into Fast Recovery Mode
+
+
+ FAST RECOVERY
+
+    • if duplicate ACK
+      cwnd = cwnd + MSS
+      transmit new segment(s), as allowed
+      
+    • if new ACK
+      cwnd = ssthresh
+      dupACKcount = 0
+      TCP transitions into Congestion Avoidance mode
+
+    • if timeout
+      ssthresh = cwnd/2
+      cwnd = 1
+      dupACKcount = 0
+      retransmit missing segment
+      TCP transitions into Slow Start mode
+
+
